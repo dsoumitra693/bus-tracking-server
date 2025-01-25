@@ -1,0 +1,40 @@
+version: '1.0'  # Version of the docker-compose file
+
+services:
+  # Redis service definition (used as cache)
+  cache:
+    image: redis:latest  # Use the latest Redis image from Docker Hub
+    restart: always  # Automatically restart the container if it fails
+    ports:
+      - '6379:6379'  # Expose Redis port to the host
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81  # Run Redis server with specific configurations:
+      # - Automatically save data to disk after 20 changes with 1 second interval
+      # - Set log level to 'warning'
+      # - Set Redis password for security
+    volumes: 
+      - cache:/data  # Persist Redis data to a Docker volume for data durability
+
+  # API server service definition (your main application)
+  api-server:
+    build:
+      context: ./packages/api-service  # The directory containing the Dockerfile for the API service
+      dockerfile: Dockerfile  # Specify the Dockerfile to use for building the image
+    restart: always  # Automatically restart the container if it fails
+    ports:
+      - '3000:3000'  # Expose the API server's port (3000) to the host machine
+    environment:
+      - NODE_ENV=production  # Set the environment to production mode
+      - PORT=3000  # Expose the port the API server will run on
+      - NEON_DB_URL=postgresql://neondb_owner:gw7Jh4lkYPZz@ep-withered-cherry-a1v7pp8e-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require  # Use environment variable for Neon DB URL (secure storage)
+      - REDIS_HOST=cache  # Connect to the Redis service defined above (use service name as hostname)
+      - REDIS_PORT=6379  # Redis port (default)
+      - REDIS_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81  # Redis password (you should move this to a secret in production)
+    depends_on:
+      - cache  # Ensure Redis (cache) service is started before the API server starts
+    volumes:
+      - ./api:/app  # Mount the API code directory to the container so that code changes can be reflected immediately
+
+# Define Docker volumes for persistent data storage
+volumes:
+  cache:
+    driver: local  # Use local driver for volume storage (Redis data will be stored here)

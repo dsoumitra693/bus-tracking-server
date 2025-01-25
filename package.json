@@ -1,0 +1,14 @@
+{
+  "name": "bus-tracking-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "workspaces": [
+    "packages/*",
+    "docs/*"
+  ],
+  "private": true,
+  "scripts": {
+    "start": "docker compose up --build"
+  }
+}

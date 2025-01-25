@@ -1,0 +1,24 @@
+# Use an official Node.js runtime as a parent image
+FROM node:latest
+
+# Set the working directory inside the container
+WORKDIR /usr/src/app
+
+# Copy package.json and package-lock.json for dependency installation
+COPY package*.json ./
+
+# Install production dependencies and development dependencies
+RUN npm install --production && \
+    npm install --save-dev @types/node @types/express @types/pg
+
+# Copy the rest of the application files
+COPY . .
+
+# Ensure TypeScript compiles correctly by adding the appropriate flags
+RUN npm run build
+
+# Expose the port your app will run on
+EXPOSE 3000
+
+# Command to run the app
+CMD ["node", "dist/index.js"]
