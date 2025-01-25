@@ -25,7 +25,7 @@ services:
     environment:
       - NODE_ENV=production  # Set the environment to production mode
       - PORT=3000  # Expose the port the API server will run on
-      - NEON_DB_URL=postgresql://neondb_owner:gw7Jh4lkYPZz@ep-withered-cherry-a1v7pp8e-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require  # Use environment variable for Neon DB URL (secure storage)
+      - NEON_DB_URL=${NEON_DB_URL}  # Use environment variable for Neon DB URL (secure storage)
       - REDIS_HOST=cache  # Connect to the Redis service defined above (use service name as hostname)
       - REDIS_PORT=6379  # Redis port (default)
       - REDIS_PASSWORD=eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81  # Redis password (you should move this to a secret in production)
