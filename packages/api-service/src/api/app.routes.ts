@@ -36,16 +36,15 @@ class ApiRouter {
    * Initializes the routes for the API with versioning.
    * This method maps routes to corresponding controller methods. The routes 
    * handle bus-related requests, including fetching, updating, and deleting bus details.
-   * The routes are versioned with `/v1`.
    */
   private initializeRoutes(): void {
     const apiController = ApiController.getInstance();  // Get the singleton instance of ApiController
 
     // Versioned routes for bus details
-    this.router.get("/v1/bus/details", apiController.getBusDetails.bind(apiController));  // Get bus details by ID or route number
-    this.router.get("/v1/bus", apiController.getAllBusDetails.bind(apiController));          // Get all bus details with pagination
-    this.router.put("/v1/bus/:id", apiController.updateBusDetails.bind(apiController));      // Update bus details by ID
-    this.router.delete("/v1/bus/:id", apiController.deleteBusDetails.bind(apiController));   // Delete bus details by ID
+    this.router.get("/bus/details", apiController.getBusDetails.bind(apiController));  // Get bus details by ID or route number
+    this.router.get("/bus", apiController.getAllBusDetails.bind(apiController));          // Get all bus details with pagination
+    this.router.put("/bus/:id", apiController.updateBusDetails.bind(apiController));      // Update bus details by ID
+    this.router.delete("/bus/:id", apiController.deleteBusDetails.bind(apiController));   // Delete bus details by ID
   }
 
   /**
